@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors'
 
 import userRoutes from '../routes/users.routes'
+import AppDataSource from '../database/config'
 
 class Server{
 
@@ -12,11 +13,22 @@ class Server{
     this.app = express();
     this.port = process.env.PORT;
 
+    // database
+    this.databaseInitialize()
+
     // Middlewares
     this.middlewares()
 
     // Routes
     this.routes()
+  }
+
+  async databaseInitialize(){
+    try{
+      await AppDataSource.initialize()
+    }catch(err){
+      console.log(err)
+    }
   }
 
   middlewares(){
