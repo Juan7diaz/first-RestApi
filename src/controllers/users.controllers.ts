@@ -4,16 +4,33 @@ import bcrypt from 'bcryptjs'
 import Users from '../entities/users'
 import AppDataSource from '../database/config'
 
-export const getUsers = (req: Request, res: Response) => {
-  res.json({
-    msg: "Get users -  controllers"
-  })
+export const getUsers = async(req: Request, res: Response) => {
+
+  const UsersRepository = AppDataSource.getRepository(Users)
+
+  try{
+
+    // We only get active users
+    const allUsers = await UsersRepository.findBy({state: true,})
+    const amountUsers = await UsersRepository.countBy({state: true})
+
+    res.json({
+      amount: amountUsers,
+      users: allUsers
+    })
+
+  }catch(err){
+
+    res.status(400).json({
+      error: err
+    })
+
+  }
 }
 
 export const postUser = (req: Request, res: Response) => {
 
   const { name, email, password, role } = req.body
-
 
   const user = new Users()
   user.name = name
