@@ -10,7 +10,7 @@ const AppDataSource = new DataSource({
   port: 5432,
   database: "CoffeeApi",
   entities: [Users],
-  logging: true,
+  //logging: true,
   synchronize: true,
 });
 

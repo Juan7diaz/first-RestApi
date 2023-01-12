@@ -1,4 +1,6 @@
 import { Request, Response } from "express";
+import Users from '../entities/users'
+import AppDataSource from '../database/config'
 
 export const getUsers = (req: Request, res: Response) => {
   res.json({
@@ -7,8 +9,20 @@ export const getUsers = (req: Request, res: Response) => {
 }
 
 export const postUser = (req: Request, res: Response) => {
+
+  const { name, email, password, role } = req.body
+
+  const user = new Users()
+  user.name = name
+  user.email = email
+  user.password = password
+  user.role = role
+
+  AppDataSource.manager.save(user)
+
   res.json({
-    msg: "Post users -  controllers"
+    message: "User created successfully",
+    user
   })
 }
 

@@ -14,7 +14,7 @@ class Users {
     @Column()
     password: string
 
-    @Column()
+    @Column({default: null})
     img: string
 
     @Column()
