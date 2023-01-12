@@ -2,11 +2,17 @@ import { Router } from "express";
 import { check } from 'express-validator'
 import { validateFields } from '../middlewares/validateFields'
 import { existingEmail } from '../helpers/dbValidators'
-import { getUsers, postUser, putUser, patchUser, deleteUser } from '../controllers/users.controllers'
+import { getUsers, getUser,postUser, putUser, patchUser, deleteUser } from '../controllers/users.controllers'
 
 const router = Router()
 
 router.get('/', getUsers)
+
+router.get('/:id',[
+  check('id', 'must be a number').isNumeric(),
+  validateFields
+], getUser)
+
 
 router.post('/',[
   check('name', 'The name cannot be empty').notEmpty(),

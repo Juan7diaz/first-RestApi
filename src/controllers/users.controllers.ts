@@ -28,6 +28,27 @@ export const getUsers = async(req: Request, res: Response) => {
   }
 }
 
+export const getUser = async(req: Request, res: Response) => {
+
+  const UsersRepository = AppDataSource.getRepository(Users)
+  const userId = parseInt(req.params.id)
+
+  try{
+
+    const user = await UsersRepository.findOneBy({  id: userId, state: true })
+    res.json(
+      user ? user : { message: `the user with id ${userId} does not exist`}
+    )
+
+  }catch(err){
+
+    res.status(400).json({
+      error: err
+    })
+
+  }
+}
+
 export const postUser = (req: Request, res: Response) => {
 
   const { name, email, password, role } = req.body
