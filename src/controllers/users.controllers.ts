@@ -1,4 +1,6 @@
 import { Request, Response } from "express";
+import bcrypt from 'bcryptjs'
+
 import Users from '../entities/users'
 import AppDataSource from '../database/config'
 
@@ -12,10 +14,11 @@ export const postUser = (req: Request, res: Response) => {
 
   const { name, email, password, role } = req.body
 
+
   const user = new Users()
   user.name = name
   user.email = email
-  user.password = password
+  user.password = bcrypt.hashSync(password, bcrypt.genSaltSync(10))
   user.role = role
 
   AppDataSource.manager.save(user)
