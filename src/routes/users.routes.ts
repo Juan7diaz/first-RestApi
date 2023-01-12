@@ -13,7 +13,6 @@ router.get('/:id',[
   validateFields
 ], getUser)
 
-
 router.post('/',[
   check('name', 'The name cannot be empty').notEmpty(),
   check('email', 'Must be a valid email').isEmail(),

@@ -10,9 +10,10 @@ export const getUsers = async(req: Request, res: Response) => {
 
   try{
 
-    // We only get active users
-    const allUsers = await UsersRepository.findBy({state: true,})
-    const amountUsers = await UsersRepository.countBy({state: true})
+    const [ allUsers, amountUsers ] = await Promise.all([
+      UsersRepository.findBy( {state: true,} ),
+      UsersRepository.countBy({state: true})
+    ])
 
     res.json({
       amount: amountUsers,
