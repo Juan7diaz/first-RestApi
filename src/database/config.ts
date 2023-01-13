@@ -1,5 +1,7 @@
 import { DataSource } from "typeorm";
 import Users from '../entities/users'
+import Roles from '../entities/roles'
+
 
 
 const AppDataSource = new DataSource({
@@ -9,7 +11,7 @@ const AppDataSource = new DataSource({
   password: "password",
   port: 5432,
   database: "CoffeeApi",
-  entities: [Users],
+  entities: [Users, Roles],
   //logging: true,
   synchronize: true,
 });
