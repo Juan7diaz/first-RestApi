@@ -2,8 +2,6 @@ import { DataSource } from "typeorm";
 import Users from '../entities/users'
 import Roles from '../entities/roles'
 
-
-
 const AppDataSource = new DataSource({
   type: "postgres",
   host: "localhost",

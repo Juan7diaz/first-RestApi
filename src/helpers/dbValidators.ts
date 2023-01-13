@@ -1,4 +1,6 @@
 import User from '../entities/users'
+import Roles from '../entities/roles'
+
 import AppDataSource from '../database/config'
 
 export const existingEmail = async(email = '') => {
@@ -28,6 +30,18 @@ export const existingUserById = async( id : number ) => {
 
   if(!userExists){
     throw new Error(`user with id ${id} is not registered in the database`)
+  }
+
+}
+
+export const existingRole = async( role: string = "" ) => {
+
+  const UserRepository = AppDataSource.getRepository(Roles)
+
+  const rolExists = await UserRepository.findOneBy({ name: role })
+
+  if(!rolExists){
+    throw new Error(`the entered role is not registered in the database`)
   }
 
 }
