@@ -70,7 +70,7 @@ export const postUser = (req: Request, res: Response) => {
 
 export const putUser = async(req: Request, res: Response) => {
 
-  const idUser = parseInt( req.params.id )
+  const idUser = parseInt( req.params.idUser )
   const { id, password, google, state, ...rest } = req.body
 
   //cambiar la contraseña
@@ -79,6 +79,7 @@ export const putUser = async(req: Request, res: Response) => {
   }
 
   try {
+
     const UsersRepository = AppDataSource.getRepository(Users)
     await UsersRepository.update(idUser, rest)
     const currUser = await UsersRepository.findOneBy({id: idUser})

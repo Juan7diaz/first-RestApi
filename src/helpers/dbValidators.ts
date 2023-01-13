@@ -15,3 +15,19 @@ export const existingEmail = async(email = '') => {
   }
 
 }
+
+export const existingUserById = async( id : number ) => {
+
+  const UserRepository = AppDataSource.getRepository(User)
+
+  const userExists = await UserRepository.findOneBy({
+    id: id,
+    state: true,
+  })
+
+
+  if(!userExists){
+    throw new Error(`user with id ${id} is not registered in the database`)
+  }
+
+}
