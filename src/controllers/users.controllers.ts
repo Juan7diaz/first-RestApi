@@ -68,10 +68,32 @@ export const postUser = (req: Request, res: Response) => {
   })
 }
 
-export const putUser = (req: Request, res: Response) => {
-  res.json({
-    msg: "Put users -  controllers"
-  })
+export const putUser = async(req: Request, res: Response) => {
+
+  const idUser = parseInt( req.params.id )
+  const { id, password, google, state, ...rest } = req.body
+
+  //cambiar la contraseña
+  if(password){
+    rest.password = bcrypt.hashSync(password, bcrypt.genSaltSync(10))
+  }
+
+  try {
+    const UsersRepository = AppDataSource.getRepository(Users)
+    await UsersRepository.update(idUser, rest)
+    const currUser = await UsersRepository.findOneBy({id: idUser})
+
+    res.json({
+      message: "User updated successfully",
+      user: currUser
+    })
+
+  } catch (error) {
+    res.status(400).json({
+      message: `An error occurred while updating: ${error}`,
+    })
+  }
+
 }
 
 export const patchUser = (req: Request, res: Response) => {
