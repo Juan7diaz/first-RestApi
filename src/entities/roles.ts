@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn } from "typeorm"
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from "typeorm"
+import Users from './users'
 
 @Entity()
 class Roles {
@@ -7,6 +8,9 @@ class Roles {
 
     @Column()
     name: string
+
+    @OneToMany(() => Users, (user) => user.role)
+    user: Users[]
 
 }
 

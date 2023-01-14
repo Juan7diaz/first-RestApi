@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn } from "typeorm"
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from "typeorm"
+import Roles from './roles'
 
 @Entity()
 class Users {
@@ -17,8 +18,8 @@ class Users {
     @Column({default: null})
     img: string
 
-    @Column()
-    role: string
+    @ManyToOne(() => Roles, (rol) => rol.name)
+    role: Roles
 
     @Column({default: true})
     state: boolean
