@@ -20,7 +20,8 @@ router.post('/',[
   check('email').custom( (email) => existingEmail(email) ),
   check('password', 'Password must be at least 6 characters').isLength({ min: 6 }),
   check('role', 'The role cannot be empty').notEmpty(),
-  check("role", 'the role entered does not exist').custom( (role) => existingRole(role) ),
+  check('role', 'The role must be a number').isNumeric(),
+  check("role", 'the Id role entered does not exist').custom( (id) => existingRole(id) ),
   validateFields
 ], postUser)
 
@@ -30,7 +31,8 @@ router.put('/:idUser',[
   check('email', 'Must be a valid email').optional().isEmail(),
   check('password', 'Password must be at least 6 characters').optional().isLength({ min: 6 }),
   check('role', 'The role cannot be empty').optional().notEmpty(),
-  check("role", 'the role entered does not exist').optional().custom( (role) => existingRole(role) ),
+  check('role', 'The role must be a number').optional().isNumeric(),
+  check("role", 'the id role entered does not exist').optional().custom( (role) => existingRole(role) ),
   validateFields
 ], putUser)
 

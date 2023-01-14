@@ -34,11 +34,11 @@ export const existingUserById = async( id : number ) => {
 
 }
 
-export const existingRole = async( role: string = "" ) => {
+export const existingRole = async( idRole: number ) => {
 
   const UserRepository = AppDataSource.getRepository(Roles)
 
-  const rolExists = await UserRepository.findOneBy({ name: role })
+  const rolExists = await UserRepository.findOneBy({ id: idRole })
 
   if(!rolExists){
     throw new Error(`the entered role is not registered in the database`)

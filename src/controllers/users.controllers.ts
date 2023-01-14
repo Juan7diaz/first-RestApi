@@ -6,18 +6,20 @@ import AppDataSource from '../database/config'
 
 export const getUsers = async(req: Request, res: Response) => {
 
-  const UsersRepository = AppDataSource.getRepository(Users)
+AppDataSource.getRepository(Users)
 
   try{
 
+    // https://typeorm.io/many-to-one-one-to-many-relations
+    // https://orkhan.gitbook.io/typeorm/docs/find-options
     const [ allUsers, amountUsers ] = await Promise.all([
-      UsersRepository.findBy( {state: true,} ),
-      UsersRepository.countBy({state: true})
+      AppDataSource.getRepository(Users).find({ relations: { role: true}, where: { state: true }  }),
+      AppDataSource.getRepository(Users).countBy({state: true}),
     ])
 
     res.json({
-      amount: amountUsers,
-      users: allUsers
+      amountUsers,
+      allUsers
     })
 
   }catch(err){
@@ -31,14 +33,19 @@ export const getUsers = async(req: Request, res: Response) => {
 
 export const getUser = async(req: Request, res: Response) => {
 
-  const UsersRepository = AppDataSource.getRepository(Users)
   const userId = parseInt(req.params.id)
 
   try{
 
-    const user = await UsersRepository.findOneBy({  id: userId, state: true })
+    const user = await AppDataSource
+      .getRepository(Users)
+      .find({
+        relations: { role: true },
+        where: { state: true, id: userId }
+      })
+
     res.json(
-      user ? user : { message: `the user with id ${userId} does not exist`}
+      user.length > 0 ? user : { message: `the user with id ${userId} does not exist`}
     )
 
   }catch(err){
@@ -52,20 +59,29 @@ export const getUser = async(req: Request, res: Response) => {
 
 export const postUser = (req: Request, res: Response) => {
 
-  const { name, email, password, role } = req.body
+  try{
 
-  const user = new Users()
-  user.name = name
-  user.email = email
-  user.password = bcrypt.hashSync(password, bcrypt.genSaltSync(10))
-  user.role = role
+    const { name, email, password, role } = req.body
 
-  AppDataSource.manager.save(user)
+    const user = new Users()
+    user.name = name
+    user.email = email
+    user.password = bcrypt.hashSync(password, bcrypt.genSaltSync(10))
+    user.role = role
 
-  res.json({
-    message: "User created successfully",
-    user
-  })
+    AppDataSource.manager.save(user)
+
+    res.json({
+      message: "User created successfully",
+      user
+    })
+
+  }catch(err){
+    res.status(400).json({
+      message: err
+    })
+  }
+
 }
 
 export const putUser = async(req: Request, res: Response) => {
