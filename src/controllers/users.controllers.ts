@@ -84,6 +84,7 @@ export const postUser = (req: Request, res: Response) => {
 
     res.json({
       message: "User created successfully",
+      user: user
     })
 
   }catch(err){
