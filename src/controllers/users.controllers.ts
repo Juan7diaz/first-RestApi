@@ -130,8 +130,24 @@ export const patchUser = (req: Request, res: Response) => {
   })
 }
 
-export const deleteUser = (req: Request, res: Response) => {
-  res.json({
-    msg: "delete users -  controllers"
-  })
+export const deleteUser = async(req: Request, res: Response) => {
+
+  const { idUser } = req.params
+
+  try {
+
+    const UsersRepository = AppDataSource.getRepository(Users)
+    const userToDelete = await UsersRepository.update(idUser, {state: false})
+
+    res.json({
+      msg: `The user with id ${idUser} has been successfully deleted.`,
+      userToDelete
+    })
+
+  }catch(error){
+    res.status(400).json({
+      message: `An error occurred during the deletion process: ${error}`,
+    })
+  }
+
 }

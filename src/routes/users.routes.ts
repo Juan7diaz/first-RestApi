@@ -38,6 +38,10 @@ router.put('/:idUser',[
 
 router.patch('/', patchUser)
 
-router.delete('/', deleteUser)
+router.delete('/:idUser',[
+  check('idUser', 'must be a number').isNumeric(),
+  check("idUser").custom( (id) => existingUserById(id) ),
+  validateFields
+], deleteUser)
 
 export default router
